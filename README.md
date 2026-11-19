@@ -1,136 +1,111 @@
 # 🍰 SliceSmith
 
 > **Deterministic Multi-Agent Build Harness for Full-Stack & Mobile Projects**  
-> Orchestrates AI agents across backend, frontend, and mobile repos from a single place.
+> Build complete projects across backend, frontend, and mobile apps from a single place—orchestrated with vertical feature slices, strict token budgeting, and zero AI guessing.
 
 ---
 
-## 🚀 Quickstart: Building Your New Project
+## ⚡ Why SliceSmith?
 
-### Step 1: Initialize Your Project Hub
-Navigate to your desired project hub location (or run directly):
+- **Vertical Slices (Not Stack-by-Stack)**: Builds feature-by-feature (Auth ➔ Profiles ➔ Wallets) across backend, web, and mobile simultaneously. Eliminates late integration bugs.
+- **85%+ Token Savings**: Context Compiler feeds agents only cited requirement IDs and strict allowed files—never entire repositories.
+- **Deterministic Coordinator**: Task scheduling, validation, and file tracking run in pure TypeScript code (zero LLM token sink).
+- **Boilerplate Quarantine**: Automatically detects and ignores demo/leftover code from starter templates.
+
+---
+
+## 🚀 Quickstart
+
+### 1. Initialize a Project Hub
 ```bash
-# In your project folder:
 slicesmith init <project-name>
+cd <project-name>
 ```
-This generates the full project structure:
-```
+
+This generates your project workspace:
+```text
 my-project/
-├── project.yaml              ← Configuration: repos, stack packs, policy, budgets
-├── AGENTS.md                 ← Global boundary rules (allowed-files, zero invention)
+├── development/              ← 💻 ALL APPLICATION CODE
+│   ├── backend/              ← NestJS, Laravel, FastAPI, or Go
+│   ├── app/                  ← Flutter (Android/iOS) or React Native
+│   └── web/                  ← Next.js (User platform & Admin panel)
 │
-├── inbox/                    ← 📥 DROP YOUR RAW REQUIREMENTS HERE
-│   ├── docs/                 ← Briefs, PDFs, docx, specifications
-│   ├── screens/              ← Figma exports, screenshots, UI designs
-│   └── notes/                ← Chat transcripts, client requirements, emails
+├── inbox/                    ← 📥 DROP RAW CLIENT ASSETS HERE
+│   ├── docs/                 ← Client briefs, PDFs, requirements
+│   ├── screens/              ← UI screenshots, Figma exports
+│   └── notes/                ← Chat transcripts, client notes
 │
-├── requirements/             ← 📋 DISTILLED REQUIREMENTS
-│   ├── LEDGER.md             ← Single source of truth (R-001, R-002...)
-│   └── specs/                ← Converted markdown specs (token-optimized)
-│
-├── contracts/                ← 🔌 CONTRACT BRIDGE
-│   ├── API.md                ← OpenAPI / endpoints contract
-│   └── REALTIME.md           ← WebSocket / Socket.io events
-│
-├── docs/                     ← 🏛️ DECISIONS & KNOWLEDGE
-│   ├── DECISIONS.md          ← Locked decisions & recorded assumptions
-│   ├── OPEN_QUESTIONS.md     ← Ambiguities with proposed defaults
-│   └── PROJECT_BRIEF.md      ← Generated overview from onboard
-│
-└── tasks/                    ← 🍰 VERTICAL SLICES & TASK CONTRACTS
-    ├── SLICES.md             ← Master vertical slice execution board
-    └── T-BE-001.md...        ← Granular task contracts with allowed-files
+├── requirements/             ← 📋 DISTILLED LEDGER (R-001, R-002...)
+├── contracts/                ← 🔌 CONTRACT BRIDGE (API.md, REALTIME.md)
+├── docs/                     ← 🏛️ ARCHITECTURE (DECISIONS.md, DESIGN_SYSTEM.md)
+├── tasks/                    ← 🍰 VERTICAL SLICES & TASK CONTRACTS (SLICES.md)
+└── project.yaml              ← Multi-repo configuration & token budgets
 ```
 
 ---
 
-### Step 2: Attach Your Boilerplates & Drop Requirements
+### 2. Add Requirements & Repos
 
-1. **Drop your requirements files**:
-   - Put client PDFs/docs in `inbox/docs/`
-   - Put screenshots/UI exports in `inbox/screens/`
-   - Put client chat/notes in `inbox/notes/`
+1. **Drop requirements into `inbox/`**:
+   - PDFs & briefs in `inbox/docs/`
+   - UI screenshots in `inbox/screens/`
+   - Client messages or links in `inbox/notes/`
 
-2. **Configure your repo paths in `project.yaml`**:
-   ```yaml
-   name: my-new-project
-   mode: existing # or new
-   
-   repos:
-     - id: api
-       role: api
-       stack: nestjs # or laravel, fastapi, go
-       path: ./my_backend_boilerplate
-       validate:
-         - npm run lint
-         - npm test
-       task_prefix: T-BE
-   
-     - id: app
-       role: mobile
-       stack: flutter
-       path: ./my_flutter_boilerplate
-       validate:
-         - flutter analyze
-         - flutter test
-       task_prefix: T-APP
-   ```
+2. **Place your boilerplates inside `development/`**:
+   - `development/backend/`
+   - `development/app/`
+   - `development/web/`
 
 ---
 
-### Step 3: Run the SliceSmith Pipeline
+### 3. Run the Pipeline
 
 ```bash
-# 1. Verify your toolchains and environment
+# 1. Check environment and toolchains
 slicesmith doctor
 
-# 2. Convert and distill all raw inbox assets into the Requirements Ledger
+# 2. Convert raw PDFs/screens into distilled requirements ledger
 slicesmith intake convert
 
-# 3. Scan your backend & Flutter boilerplates (detects modules & template leftovers)
+# 3. Scan boilerplates (detects modules & quarantines template leftovers)
 slicesmith onboard
 
-# 4. Generate the vertical slice execution plan & task contracts
+# 4. Generate vertical feature slices & task contracts
 slicesmith plan
 
-# 5. Check task status and progress
+# 5. Check real-time progress
 slicesmith status
 
-# 6. Execute a task with Gemini (or configured runner)
+# 6. Execute a task with AI runner (Gemini, Claude, or Cursor)
 slicesmith run T-BE-001
 
-# 7. Review token consumption, prompt cache savings, and cost
+# 7. View token usage & cost ledger
 slicesmith tokens
 ```
 
 ---
 
-## ⚡ Core Innovations & Token Optimizations
+## 🛠️ CLI Commands
 
-1. **Context Compiler**: Agents are never fed entire codebases. Each task receives an ultra-lean context pack (~1,500 tokens) with strict `Allowed Files`, cited requirement IDs (`R-001`), and Stack Pack conventions.
-2. **Deterministic Coordinator**: Task scheduling, status tracking, test verification, and file management are handled in zero-token TypeScript code—not by an expensive LLM.
-3. **Boilerplate Registry**: Scans attached boilerplates and registers demo/starter template leftovers (`cart`, `counter`, `sample`) so AI agents never build on unwanted demo code.
-4. **Token Ledger**: Every run logs tokens-in, tokens-out, prompt cache hits, and estimated USD cost to `.slicesmith/token-ledger.json`.
-5. **9 Human Approval Gates**: Safety rails for destructive migrations, production deploys, and security changes.
+| Command | Action |
+|---|---|
+| `slicesmith init [name]` | Creates a new project hub with `development/` and `inbox/` |
+| `slicesmith doctor` | Diagnostics for Node, Flutter, Dart, Git, and AI keys |
+| `slicesmith intake convert` | Converts PDFs/docs to markdown & distills `LEDGER.md` |
+| `slicesmith onboard` | Scans boilerplates and registers template leftovers |
+| `slicesmith plan` | Generates vertical feature slices and task contracts |
+| `slicesmith run <taskId>` | Compiles context pack and executes with primary AI runner |
+| `slicesmith status` | Shows completion percentage across all slices |
+| `slicesmith tokens` | Live token meter, prompt cache savings, and cost summary |
 
 ---
 
-## 🛠️ CLI Command Reference
+## 🛡️ Built-in Guardrails
 
-| Command | Description |
-|---|---|
-| `slicesmith init [name]` | Initializes a new SliceSmith project hub |
-| `slicesmith doctor` | Verifies toolchains (Node, Flutter, Git) and AI API keys |
-| `slicesmith intake scan` | Scans `inbox/` for newly added client files |
-| `slicesmith intake convert` | Converts raw assets to markdown & populates `LEDGER.md` |
-| `slicesmith intake list` | Displays the current requirements ledger |
-| `slicesmith onboard` | Scans attached boilerplates and generates `PROJECT_BRIEF.md` |
-| `slicesmith plan` | Generates vertical feature slices and task contracts |
-| `slicesmith run <taskId>` | Compiles context and executes a task with the primary runner |
-| `slicesmith status` | Displays progress across all feature slices |
-| `slicesmith tokens` | Displays token usage, cache savings, and cost breakdown |
+- **Strict File Boundaries**: Agents can only touch files explicitly listed in the task contract's `Allowed Files`.
+- **Zero-Assumption Policy**: Ambiguities are recorded in `docs/OPEN_QUESTIONS.md` instead of guessing in code.
+- **Evidence-Based Done**: Tasks are never marked complete without passing real terminal validation (`lint`, `test`, `build`).
 
 ---
 
 *SliceSmith v0.1.0 • Built for solo developers & high-velocity teams*
-
